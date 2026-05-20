@@ -1,0 +1,34 @@
+{
+  "template": "blue-book-record-player",
+  "render": {
+    "fps": 30,
+    "width": 1920,
+    "height": 1080,
+    "output": "dist/blue-book.mp4"
+  },
+  "content": {
+    "title": "催眠",
+    "subtitle": "催眠",
+    "author": "催眠"
+  },
+  "assets": {
+    "images": "assets/backgrounds",
+    "bgm": "assets/music/月光.mp3"
+  },
+  "audioMix": {
+    "bgmVolume": 0.18
+  },
+  "transcript": {
+    "file": "inputs/blue-book-record-player.manuscript.txt"
+  },
+  "tts": {
+    "apiKey": "get from https://console.volcengine.com/speech/new/setting/apikeys",
+    "resourceId": "seed-tts-2.0",
+    "speaker": "pick from https://qkunio.github.io/doubao-tts-examples",
+    "audioFormat": "mp3",
+    "sampleRate": 24000
+  },
+  "templateConfig": {
+    "fitMode": "cover"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "podcastx",
+  "version": "1.0.0",
+  "description": "Transcript-to-video renderer powered by Remotion and TTS",
+  "scripts": {
+    "setup": "node scripts/setup-assets.mjs",
+    "check": "node scripts/check-assets.mjs",
+    "sync-props": "tsx scripts/sync-studio-props.ts",
+    "sample-voices": "node scripts/generate-voice-samples.mjs",
+    "dev": "node scripts/setup-assets.mjs && npm run sync-props && remotion studio src/index.ts --no-open",
+    "build": "remotion bundle src/index.ts",
+    "render": "node scripts/setup-assets.mjs && tsx render.ts",
+    "postinstall": "node scripts/setup-assets.mjs"
+  },
+  "dependencies": {
+    "sharp": "^0.33.5",
+    "@remotion/bundler": "^4.0.286",
+    "@remotion/cli": "^4.0.286",
+    "@remotion/media-utils": "^4.0.286",
+    "@remotion/player": "^4.0.286",
+    "@remotion/renderer": "^4.0.286",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.286"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

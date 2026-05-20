@@ -1,0 +1,18 @@
+node_modules/
+dist/
+dist-ts/
+.remotion/
+*.log
+.DS_Store
+fonts/
+
+# Generated files with absolute paths
+src/generated/
+
+# Generated assets (TTS audio, SRT, cached files)
+assets/generated/
+
+# Input files may contain API keys and sensitive data
+inputs/*.json
+inputs/*.txt
+!inputs/*.example.json
