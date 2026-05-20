@@ -1,0 +1,39 @@
+{
+  "template": "classic-player",
+  "render": {
+    "fps": 30,
+    "width": 1440,
+    "height": 1080,
+    "output": "dist/output.mp4"
+  },
+  "content": {
+    "title": "PodcastX",
+    "subtitle": "Run npm run sync-props to preview an input"
+  },
+  "assets": {
+    "images": "assets/backgrounds"
+  },
+  "transcript": {
+    "text": ""
+  },
+  "tts": {
+    "apiKey": ""
+  },
+  "templateConfig": {
+    "fitMode": "cover"
+  },
+  "fps": 30,
+  "width": 1440,
+  "height": 1080,
+  "output": "dist/output.mp4",
+  "duration": 12,
+  "audioDuration": 12,
+  "fitMode": "cover",
+  "subtitles": [],
+  "imagePaths": [
+    "backgrounds/example-bg.png"
+  ],
+  "backgroundImagePath": "backgrounds/example-bg.png",
+  "audioPath": "",
+  "srtPath": ""
+}

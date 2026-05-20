@@ -27,6 +27,7 @@ const getAudioDuration = (audioPath: string): number => {
     binariesDirectory: null,
   });
   RenderInternals.makeFileExecutableIfItIsNot(ffprobe);
+  const binaryDir = path.dirname(ffprobe);
 
   const result = spawnSync(
     ffprobe,
@@ -43,7 +44,9 @@ const getAudioDuration = (audioPath: string): number => {
       encoding: 'utf-8',
       env: {
         ...process.env,
-        PATH: `${path.dirname(ffprobe)}${path.delimiter}${process.env.PATH ?? ''}`,
+        PATH: `${binaryDir}${path.delimiter}${process.env.PATH ?? ''}`,
+        DYLD_LIBRARY_PATH: `${binaryDir}${path.delimiter}${process.env.DYLD_LIBRARY_PATH ?? ''}`,
+        LD_LIBRARY_PATH: `${binaryDir}${path.delimiter}${process.env.LD_LIBRARY_PATH ?? ''}`,
       },
     },
   );
@@ -306,6 +309,6 @@ export const resolveInput = async (
 export const loadInput = (argv: string[]): Promise<ResolvedVideoInput> => {
   const projectRoot = getProjectRoot();
   const cliPath = parseCliInputPath(argv);
-  const configPath = cliPath ?? 'inputs/example.json';
+  const configPath = cliPath ?? 'inputs/blue-book-record-player.example.json';
   return loadInputFromFile(configPath, projectRoot);
 };

@@ -2,12 +2,30 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {bundle} from '@remotion/bundler';
 import {renderMedia, selectComposition} from '@remotion/renderer';
-import {COMPOSITION_ID} from './src/Root';
+import {COMPOSITION_ID} from './src/composition';
+import {sanitizeStudioProps} from './src/utils/studioProps';
 import {getProjectRoot, loadInput} from './src/utils/loadInput';
+import type {PodcastXProps} from './src/types';
+
+const writeStudioDefaultProps = (
+  projectRoot: string,
+  props: PodcastXProps,
+): void => {
+  const outDir = path.join(projectRoot, 'src', 'generated');
+  const outFile = path.join(outDir, 'studio-props.json');
+
+  fs.mkdirSync(outDir, {recursive: true});
+  fs.writeFileSync(
+    outFile,
+    `${JSON.stringify(sanitizeStudioProps(props), null, 2)}\n`,
+    'utf-8',
+  );
+};
 
 const main = async () => {
   const projectRoot = getProjectRoot();
   const input = await loadInput(process.argv);
+  writeStudioDefaultProps(projectRoot, input);
 
   const outputPath = path.isAbsolute(input.output)
     ? input.output

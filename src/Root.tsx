@@ -1,10 +1,9 @@
 import React from 'react';
 import {Composition} from 'remotion';
 import studioDefaultProps from './generated/studio-props.json';
+import {COMPOSITION_ID} from './composition';
 import {PodcastX} from './PodcastX';
 import type {PodcastXProps} from './types';
-
-const COMPOSITION_ID = 'PodcastX';
 
 /** Studio 預覽用：由 scripts/sync-studio-props.ts 從 inputs/*.json 生成，勿在此文件使用 fs */
 const defaultProps = studioDefaultProps as PodcastXProps;
@@ -35,5 +34,3 @@ export const RemotionRoot: React.FC = () => {
     </>
   );
 };
-
-export {COMPOSITION_ID};

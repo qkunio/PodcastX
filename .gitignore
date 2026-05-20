@@ -8,6 +8,8 @@ fonts/
 
 # Generated files with absolute paths
 src/generated/
+!src/generated/
+!src/generated/studio-props.json
 
 # Generated assets (TTS audio, SRT, cached files)
 assets/generated/

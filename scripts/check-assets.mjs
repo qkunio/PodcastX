@@ -6,7 +6,6 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const required = [
   'assets/backgrounds',
-  'inputs/example.json',
   'inputs/blue-book-record-player.example.json',
 ];
 
@@ -46,7 +45,7 @@ if (imageCount === 0) {
   ok = false;
 }
 
-for (const rel of ['inputs/example.json', 'inputs/blue-book-record-player.example.json']) {
+for (const rel of ['inputs/blue-book-record-player.example.json']) {
   const full = path.join(root, rel);
   if (!fs.existsSync(full)) {
     continue;
