@@ -36,8 +36,8 @@ const main = async () => {
 
   console.log('Loading video config...');
   console.log(`  Template: ${input.template}`);
-  console.log(`  Images: ${input.assets.images} (${input.imagePaths.length})`);
-  console.log(`  Background: ${input.backgroundImagePath}`);
+  console.log(`  Assets: ${Object.keys(input.assetPaths).join(', ') || 'none'}`);
+  console.log(`  Background: ${input.assetPaths.background ?? 'not configured'}`);
   console.log(`  TTS audio: ${input.audioPath}`);
   console.log(`  Subtitles: ${input.srtPath} (${input.subtitles.length})`);
   console.log(`  Size: ${input.width}x${input.height} @ ${input.fps}fps`);

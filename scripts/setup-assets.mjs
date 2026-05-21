@@ -5,7 +5,7 @@ import {fileURLToPath} from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const dirs = [
-  'assets/backgrounds',
+  'assets/pics',
   'assets/generated',
   'dist',
   'inputs',
@@ -15,7 +15,7 @@ for (const dir of dirs) {
   fs.mkdirSync(path.join(root, dir), {recursive: true});
 }
 
-const bgPath = path.join(root, 'assets/backgrounds/example-bg.png');
+const bgPath = path.join(root, 'assets/pics/example-bg.png');
 const templateAssets = [
   {
     source: path.join(root, 'src/templates/blue-book-record-player/tonearm.png'),

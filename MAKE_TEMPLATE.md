@@ -5,7 +5,7 @@ Templates are presentation-only React code. They define layout, motion, visual s
 The loader resolves every JSON input into `PodcastXProps` before the template runs:
 
 - `content`: title, subtitle, author, and other display copy
-- `imagePaths` and `backgroundImagePath`: public image paths from `assets.images`
+- `assetPaths`: named public asset paths from `assets`, such as `background` or `album_img`
 - `audioPath`: generated TTS audio under `assets/generated/`
 - `subtitles`: parsed subtitle cues from generated TTS timestamps
 - `duration`, `audioDuration`, `fps`, `width`, `height`
@@ -81,10 +81,10 @@ import {toStaticSrc} from './utils/media';
 
 export const MyTemplate: React.FC<PodcastXProps> = ({
   content,
-  imagePaths,
+  assetPaths,
   audioPath,
 }) => {
-  const image = imagePaths[0];
+  const image = assetPaths.background;
 
   return (
     <AbsoluteFill>

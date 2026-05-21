@@ -6,7 +6,7 @@ import {PodcastX} from './PodcastX';
 import type {PodcastXProps} from './types';
 
 /** Studio 預覽用：由 scripts/sync-studio-props.ts 從 inputs/*.json 生成，勿在此文件使用 fs */
-const defaultProps = studioDefaultProps as PodcastXProps;
+const defaultProps = studioDefaultProps as unknown as PodcastXProps;
 
 export const RemotionRoot: React.FC = () => {
   const durationInFrames = Math.ceil(defaultProps.duration * defaultProps.fps);

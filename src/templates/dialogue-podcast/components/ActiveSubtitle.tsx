@@ -28,14 +28,6 @@ const getActiveCue = (
   return null;
 };
 
-const speakerLabel = (speaker?: string): string => {
-  if (!speaker) {
-    return '';
-  }
-
-  return speaker.replace(/[-_]+/g, ' ').toUpperCase();
-};
-
 export const ActiveSubtitle: React.FC<ActiveSubtitleProps> = ({subtitles}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
@@ -58,20 +50,6 @@ export const ActiveSubtitle: React.FC<ActiveSubtitleProps> = ({subtitles}) => {
         textAlign: 'center',
       }}
     >
-      {active.cue.speaker ? (
-        <div
-          style={{
-            marginBottom: 18,
-            color: 'rgba(255,255,255,0.72)',
-            fontFamily: 'Arial, "Microsoft YaHei", sans-serif',
-            fontSize: 28,
-            fontWeight: 800,
-            letterSpacing: 0,
-          }}
-        >
-          {speakerLabel(active.cue.speaker)}
-        </div>
-      ) : null}
       {active.cue.text.split('\n').map((line, index) => (
         <div
           key={`${active.cue.id}-${index}`}

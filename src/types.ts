@@ -37,8 +37,8 @@ export type ContentConfig = {
 };
 
 export type AssetsConfig = {
-  images: string;
   bgm?: string;
+  [assetName: string]: string | undefined;
 };
 
 export type TranscriptConfig = {
@@ -84,9 +84,8 @@ export type ResolvedVideoInput = VideoInputConfig & {
   audioDuration: number;
   fitMode: FitMode;
   subtitles: SubtitleCue[];
-  imagePaths: string[];
-  /** 相對 assets 目錄的路徑，供 staticFile() 使用 */
-  backgroundImagePath: string;
+  /** Paths relative to the assets directory, for use with staticFile(). */
+  assetPaths: Record<string, string>;
   audioPath: string;
   srtPath: string;
   bgmPath?: string;

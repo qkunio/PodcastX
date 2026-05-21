@@ -7,8 +7,7 @@ import {ConfigError} from './components/ConfigError';
 import {toStaticSrc} from './utils/media';
 
 export const BlueBookRecordPlayer: React.FC<PodcastXProps> = ({
-  imagePaths,
-  backgroundImagePath,
+  assetPaths,
   audioPath,
   content,
   subtitles,
@@ -18,15 +17,15 @@ export const BlueBookRecordPlayer: React.FC<PodcastXProps> = ({
   audioDuration,
   fps,
 }) => {
-  const backgroundPath = imagePaths?.[0] ?? backgroundImagePath;
-  const coverPath = imagePaths?.[1] ?? backgroundPath;
-  const discPath = imagePaths?.[2] ?? coverPath;
+  const backgroundPath = assetPaths.background;
+  const coverPath = assetPaths.cover ?? assetPaths.album_img ?? backgroundPath;
+  const discPath = assetPaths.disc ?? assetPaths.disc_img ?? coverPath;
 
   if (!backgroundPath || !coverPath || !discPath || !audioPath) {
     const missing = [
-      !backgroundPath ? 'imagePaths[0] background image' : null,
-      !coverPath ? 'imagePaths[1] book cover image' : null,
-      !discPath ? 'imagePaths[2] rotating disc image' : null,
+      !backgroundPath ? 'assets.background' : null,
+      !coverPath ? 'assets.cover or assets.album_img' : null,
+      !discPath ? 'assets.disc or assets.disc_img' : null,
       !audioPath ? 'audio' : null,
     ].filter(Boolean);
 

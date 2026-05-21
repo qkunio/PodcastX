@@ -12,7 +12,9 @@
     "author": "催眠"
   },
   "assets": {
-    "images": "assets/backgrounds",
+    "background": "assets/pics/blue.png",
+    "cover": "assets/pics/blue.png",
+    "disc": "assets/pics/blue.png",
     "bgm": "assets/music/月光.mp3"
   },
   "audioMix": {

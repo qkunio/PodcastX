@@ -7,11 +7,11 @@
     "output": "dist/dialogue-podcast.mp4"
   },
   "content": {
-    "title": "多人播客示例",
-    "subtitle": "不同角色使用不同音色"
+    "title": "为什么现在男女相爱都要算账了？",
+    "subtitle": "@小新播客"
   },
   "assets": {
-    "images": "assets/backgrounds",
+    "background": "assets/pics/fighting.png",
     "bgm": "assets/music/月光.mp3"
   },
   "audioMix": {

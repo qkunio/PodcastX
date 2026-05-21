@@ -6,13 +6,12 @@ import {Waveform} from './components/Waveform';
 import {toStaticSrc} from './utils/media';
 
 export const DialoguePodcast: React.FC<PodcastXProps> = ({
-  imagePaths,
-  backgroundImagePath,
+  assetPaths,
   audioPath,
   content,
   subtitles,
 }) => {
-  const backgroundPath = imagePaths?.[0] ?? backgroundImagePath;
+  const backgroundPath = assetPaths.background;
 
   if (!backgroundPath || !audioPath) {
     return (
@@ -27,7 +26,7 @@ export const DialoguePodcast: React.FC<PodcastXProps> = ({
           whiteSpace: 'pre-line',
         }}
       >
-        Dialogue podcast missing required background image or audio.
+        Dialogue podcast missing required assets.background or audio.
       </AbsoluteFill>
     );
   }
@@ -55,20 +54,22 @@ export const DialoguePodcast: React.FC<PodcastXProps> = ({
       <div
         style={{
           position: 'absolute',
-          left: 88,
+          left: 120,
           top: 72,
-          right: 88,
+          right: 120,
           color: '#fff',
           fontFamily: '"Microsoft YaHei", "PingFang SC", Arial, sans-serif',
+          textAlign: 'center',
           textShadow: '0 6px 22px rgba(0,0,0,0.42)',
         }}
       >
         <div
           style={{
-            fontSize: 62,
+            fontSize: 82,
             fontWeight: 900,
-            lineHeight: 1.08,
-            maxWidth: 1180,
+            lineHeight: 1.06,
+            maxWidth: 1400,
+            margin: '0 auto',
             overflowWrap: 'anywhere',
           }}
         >
@@ -83,6 +84,8 @@ export const DialoguePodcast: React.FC<PodcastXProps> = ({
               lineHeight: 1.2,
               color: 'rgba(255,255,255,0.82)',
               maxWidth: 980,
+              marginLeft: 'auto',
+              marginRight: 'auto',
               overflowWrap: 'anywhere',
             }}
           >

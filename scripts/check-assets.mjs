@@ -5,19 +5,14 @@ import {fileURLToPath} from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const required = [
-  'assets/backgrounds',
   'inputs/blue-book-record-player.example.json',
+  'inputs/dialogue-podcast.example.json',
 ];
 
-const imageExtensions = new Set([
-  '.apng',
-  '.avif',
-  '.gif',
-  '.jpeg',
-  '.jpg',
-  '.png',
-  '.webp',
-]);
+const exampleInputs = [
+  'inputs/blue-book-record-player.example.json',
+  'inputs/dialogue-podcast.example.json',
+];
 
 let ok = true;
 
@@ -32,20 +27,7 @@ for (const rel of required) {
   }
 }
 
-const imageDir = path.join(root, 'assets/backgrounds');
-const imageCount =
-  fs.existsSync(imageDir) && fs.statSync(imageDir).isDirectory()
-    ? fs
-        .readdirSync(imageDir)
-        .filter((name) => imageExtensions.has(path.extname(name).toLowerCase()))
-        .length
-    : 0;
-console.log(`${imageCount > 0 ? 'OK' : 'MISS'} assets/backgrounds image count: ${imageCount}`);
-if (imageCount === 0) {
-  ok = false;
-}
-
-for (const rel of ['inputs/blue-book-record-player.example.json']) {
+for (const rel of exampleInputs) {
   const full = path.join(root, rel);
   if (!fs.existsSync(full)) {
     continue;
@@ -56,6 +38,21 @@ for (const rel of ['inputs/blue-book-record-player.example.json']) {
   console.log(`${hasApiKey ? 'OK' : 'MISS'} ${rel} tts.apiKey`);
   if (!hasApiKey) {
     ok = false;
+  }
+
+  for (const [name, assetPath] of Object.entries(input.assets ?? {})) {
+    if (typeof assetPath !== 'string' || !assetPath.trim()) {
+      continue;
+    }
+
+    const assetFullPath = path.isAbsolute(assetPath)
+      ? assetPath
+      : path.join(root, assetPath);
+    const exists = fs.existsSync(assetFullPath);
+    console.log(`${exists ? 'OK' : 'MISS'} ${rel} assets.${name}: ${assetPath}`);
+    if (!exists) {
+      ok = false;
+    }
   }
 }
 

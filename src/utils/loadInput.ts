@@ -39,12 +39,6 @@ const assertFileExists = (filePath: string, label: string): void => {
   }
 };
 
-const assertDirectoryExists = (dirPath: string, label: string): void => {
-  if (!fs.existsSync(dirPath) || !fs.statSync(dirPath).isDirectory()) {
-    throw new Error(`${label} directory does not exist: ${dirPath}`);
-  }
-};
-
 const resolveProjectPath = (projectRoot: string, inputPath: string): string => {
   if (path.isAbsolute(inputPath)) {
     return path.normalize(inputPath);
@@ -52,26 +46,6 @@ const resolveProjectPath = (projectRoot: string, inputPath: string): string => {
 
   return path.resolve(projectRoot, inputPath);
 };
-
-const IMAGE_EXTENSIONS = new Set([
-  '.apng',
-  '.avif',
-  '.gif',
-  '.jpeg',
-  '.jpg',
-  '.png',
-  '.webp',
-]);
-
-const listImageFiles = (dirPath: string): string[] =>
-  fs
-    .readdirSync(dirPath, {withFileTypes: true})
-    .filter((entry) => entry.isFile())
-    .map((entry) => path.join(dirPath, entry.name))
-    .filter((filePath) =>
-      IMAGE_EXTENSIONS.has(path.extname(filePath).toLowerCase()),
-    )
-    .sort((a, b) => a.localeCompare(b));
 
 const readTranscript = (
   transcript: VideoInputConfig['transcript'],
@@ -161,6 +135,37 @@ const hasGeneratedSubtitles = (
   subtitles: ResolvedVideoInput['subtitles'];
 } => Array.isArray(generated.subtitles);
 
+const toPublicAssetPath = (assetsRoot: string, absolutePath: string): string => {
+  const relativePath = path.relative(assetsRoot, absolutePath);
+  if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
+    throw new Error(
+      `Asset must be inside the assets directory: ${absolutePath}`,
+    );
+  }
+
+  return relativePath.replace(/\\/g, '/');
+};
+
+const resolveAssetPaths = (
+  assets: VideoInputConfig['assets'],
+  projectRoot: string,
+): Record<string, string> => {
+  const assetsRoot = path.join(projectRoot, 'assets');
+  const resolved: Record<string, string> = {};
+
+  for (const [name, assetPath] of Object.entries(assets)) {
+    if (name === 'bgm' || typeof assetPath !== 'string' || !assetPath.trim()) {
+      continue;
+    }
+
+    const absolutePath = resolveProjectPath(projectRoot, assetPath);
+    assertFileExists(absolutePath, `assets.${name}`);
+    resolved[name] = toPublicAssetPath(assetsRoot, absolutePath);
+  }
+
+  return resolved;
+};
+
 export const parseCliInputPath = (argv: string[]): string | null => {
   const inputIndex = argv.findIndex((arg) => arg === '--input');
   if (inputIndex !== -1 && argv[inputIndex + 1]) {
@@ -218,8 +223,8 @@ export const resolveInput = async (
     throw new Error('Configuration is missing content.title.');
   }
 
-  if (!config.assets?.images) {
-    throw new Error('Configuration is missing assets.images.');
+  if (!config.assets || Object.keys(config.assets).length === 0) {
+    throw new Error('Configuration is missing assets.');
   }
 
   if (!config.transcript) {
@@ -230,12 +235,7 @@ export const resolveInput = async (
     throw new Error('Configuration is missing tts.apiKey.');
   }
 
-  const imagesPath = resolveProjectPath(projectRoot, config.assets.images);
-  assertDirectoryExists(imagesPath, 'assets.images');
-  const imageFiles = listImageFiles(imagesPath);
-  if (imageFiles.length === 0) {
-    throw new Error(`assets.images directory has no images: ${imagesPath}`);
-  }
+  const assetPaths = resolveAssetPaths(config.assets, projectRoot);
 
   const bgmPath = config.assets.bgm
     ? resolveProjectPath(projectRoot, config.assets.bgm)
@@ -257,10 +257,7 @@ export const resolveInput = async (
     ? generated.subtitles
     : parseSrtFile(generated.srtContent);
   const duration = audioDuration;
-
   const assetsRoot = path.join(projectRoot, 'assets');
-  const toPublicPath = (absolutePath: string) =>
-    path.relative(assetsRoot, absolutePath).replace(/\\/g, '/');
 
   return {
     ...config,
@@ -273,11 +270,10 @@ export const resolveInput = async (
     audioDuration,
     fitMode,
     subtitles,
-    imagePaths: imageFiles.map(toPublicPath),
-    backgroundImagePath: toPublicPath(imageFiles[0]),
-    audioPath: toPublicPath(generated.audioPath),
+    assetPaths,
+    audioPath: toPublicAssetPath(assetsRoot, generated.audioPath),
     srtPath: generated.srtPath,
-    bgmPath: bgmPath ? toPublicPath(bgmPath) : undefined,
+    bgmPath: bgmPath ? toPublicAssetPath(assetsRoot, bgmPath) : undefined,
   };
 };
 

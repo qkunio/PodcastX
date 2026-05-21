@@ -51,7 +51,7 @@ Example:
     "subtitle": "《沙雕心理学》"
   },
   "assets": {
-    "images": "assets/backgrounds"
+    "background": "assets/pics/example-bg.png"
   },
   "transcript": {
     "text": "第一句文稿会被 TTS 合成为声音。\n第二句文稿会同时生成字幕时间轴。"
@@ -74,6 +74,17 @@ You can also point to a local manuscript:
 ```json
 "transcript": {
   "file": "inputs/manuscript.txt"
+}
+```
+
+Assets are specified one by one. Each template decides which asset names it
+requires:
+
+```json
+"assets": {
+  "background": "assets/pics/image.png",
+  "album_img": "assets/cover.png",
+  "bgm": "assets/music/月光.mp3"
 }
 ```
 

@@ -32,7 +32,7 @@ const getBarHeight = (
       0.18;
   const normalized = Math.max(0, Math.min(1, (wave * randomAmplitude + 1) / 2));
 
-  return 8 + normalized * 92 * envelope;
+  return 16 + normalized * 184 * envelope;
 };
 
 export const Waveform: React.FC<WaveformProps> = ({
@@ -46,7 +46,7 @@ export const Waveform: React.FC<WaveformProps> = ({
     <div
       style={{
         width,
-        height: 132,
+        height: 264,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -61,7 +61,7 @@ export const Waveform: React.FC<WaveformProps> = ({
             height: getBarHeight(index, barCount, frame, fps),
             borderRadius: 999,
             backgroundColor: 'rgba(255,255,255,0.62)',
-            boxShadow: '0 0 14px rgba(255,255,255,0.22)',
+            boxShadow: '0 0 18px rgba(255,255,255,0.24)',
           }}
         />
       ))}

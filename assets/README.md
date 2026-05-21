@@ -6,7 +6,7 @@ PodcastX reads local visual assets from this directory and writes generated TTS 
 
 | Path | Purpose |
 | --- | --- |
-| `backgrounds/` | Input image folder for templates. |
+| `pics/` | Input images referenced by template-specific `assets.*` fields. |
 | `generated/` | Cached TTS audio, SRT files, and setup-synced runtime copies. |
 
 ## Optional

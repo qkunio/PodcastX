@@ -14,8 +14,7 @@ import {toStaticSrc} from './utils/media';
 
 export const ClassicPlayer: React.FC<PodcastXProps> = (props) => {
   const {
-    backgroundImagePath,
-    imagePaths,
+    assetPaths,
     audioPath,
     content,
     fitMode,
@@ -24,18 +23,18 @@ export const ClassicPlayer: React.FC<PodcastXProps> = (props) => {
     subtitles,
   } = props;
 
-  const primaryImagePath = imagePaths?.[0] ?? backgroundImagePath;
+  const primaryImagePath = assetPaths.background;
 
   if (!primaryImagePath || !audioPath) {
     const lines = [];
     if (!primaryImagePath) {
-      lines.push('assets.images is missing or has no images.');
+      lines.push('assets.background is missing.');
     }
     if (!audioPath) {
       lines.push('TTS audio was not generated.');
     }
     lines.push('');
-    lines.push('Check assets.images, transcript, and tts settings before rendering.');
+    lines.push('Check assets.background, transcript, and tts settings before rendering.');
 
     return <ConfigError message={lines.join('\n')} />;
   }
