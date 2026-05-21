@@ -1,0 +1,38 @@
+{
+  "template": "dialogue-podcast",
+  "render": {
+    "fps": 30,
+    "width": 1920,
+    "height": 1080,
+    "output": "dist/dialogue-podcast.mp4"
+  },
+  "content": {
+    "title": "多人播客示例",
+    "subtitle": "不同角色使用不同音色"
+  },
+  "assets": {
+    "images": "assets/backgrounds",
+    "bgm": "assets/music/月光.mp3"
+  },
+  "audioMix": {
+    "bgmVolume": 0.16
+  },
+  "transcript": {
+    "file": "inputs/dialogue-podcast.manuscript.txt"
+  },
+  "tts": {
+    "apiKey": "your-api-key",
+    "resourceId": "seed-tts-2.0",
+    "speaker": "fallback speaker id",
+    "speakers": {
+      "host": "zh_female_mizai_uranus_bigtts",
+      "guest_a": "zh_male_dayi_uranus_bigtts",
+      "guest_b": "zh_female_xiaohe_uranus_bigtts"
+    },
+    "audioFormat": "mp3",
+    "sampleRate": 24000
+  },
+  "templateConfig": {
+    "fitMode": "cover"
+  }
+}

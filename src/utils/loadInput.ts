@@ -1,8 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import {spawnSync} from 'node:child_process';
-import {RenderInternals} from '@remotion/renderer';
 import type {
   FitMode,
   ResolvedVideoInput,
@@ -11,6 +9,11 @@ import type {
   VideoInputConfig,
 } from '../types';
 import {parseSrtFile} from './parseSrt';
+import {
+  getMediaDuration,
+  parseDialogueTranscript,
+  synthesizeCachedDialogue,
+} from './pipeline/dialogue';
 import {synthesizeWithSrt} from './pipeline/tts';
 
 const DEFAULT_FPS = 30;
@@ -18,52 +21,6 @@ const DEFAULT_WIDTH = 1440;
 const DEFAULT_HEIGHT = 1080;
 const DEFAULT_FIT_MODE: FitMode = 'cover';
 const DEFAULT_TEMPLATE: TemplateId = 'classic-player';
-
-const getAudioDuration = (audioPath: string): number => {
-  const ffprobe = RenderInternals.getExecutablePath({
-    type: 'ffprobe',
-    indent: false,
-    logLevel: 'error',
-    binariesDirectory: null,
-  });
-  RenderInternals.makeFileExecutableIfItIsNot(ffprobe);
-  const binaryDir = path.dirname(ffprobe);
-
-  const result = spawnSync(
-    ffprobe,
-    [
-      '-v',
-      'error',
-      '-show_entries',
-      'format=duration',
-      '-of',
-      'default=noprint_wrappers=1:nokey=1',
-      audioPath,
-    ],
-    {
-      encoding: 'utf-8',
-      env: {
-        ...process.env,
-        PATH: `${binaryDir}${path.delimiter}${process.env.PATH ?? ''}`,
-        DYLD_LIBRARY_PATH: `${binaryDir}${path.delimiter}${process.env.DYLD_LIBRARY_PATH ?? ''}`,
-        LD_LIBRARY_PATH: `${binaryDir}${path.delimiter}${process.env.LD_LIBRARY_PATH ?? ''}`,
-      },
-    },
-  );
-
-  if (result.status !== 0) {
-    throw new Error(
-      `Unable to read audio duration: ${audioPath}\n${result.stderr || result.stdout}`,
-    );
-  }
-
-  const duration = Number.parseFloat(result.stdout.trim());
-  if (!Number.isFinite(duration) || duration <= 0) {
-    throw new Error(`Invalid audio duration: ${audioPath}`);
-  }
-
-  return duration;
-};
 
 export const getProjectRoot = (): string => {
   const fromModule = path.resolve(__dirname, '..', '..');
@@ -194,6 +151,16 @@ const synthesizeCachedTranscript = async (
   return {audioPath, srtPath, srtContent};
 };
 
+const hasDialogueSpeakers = (tts?: TtsConfig): boolean =>
+  Boolean(tts?.speakers && Object.keys(tts.speakers).length > 0);
+
+const hasGeneratedSubtitles = (
+  generated: {srtContent: string; subtitles?: unknown},
+): generated is {
+  srtContent: string;
+  subtitles: ResolvedVideoInput['subtitles'];
+} => Array.isArray(generated.subtitles);
+
 export const parseCliInputPath = (argv: string[]): string | null => {
   const inputIndex = argv.findIndex((arg) => arg === '--input');
   if (inputIndex !== -1 && argv[inputIndex + 1]) {
@@ -278,9 +245,17 @@ export const resolveInput = async (
   }
 
   const {text} = readTranscript(config.transcript, projectRoot);
-  const generated = await synthesizeCachedTranscript(text, config.tts, projectRoot);
-  const audioDuration = getAudioDuration(generated.audioPath);
-  const subtitles = parseSrtFile(generated.srtContent);
+  const dialogueTurns = hasDialogueSpeakers(config.tts)
+    ? parseDialogueTranscript(text)
+    : [];
+  const generated =
+    dialogueTurns.length > 0 && config.tts
+      ? await synthesizeCachedDialogue(dialogueTurns, config.tts, projectRoot)
+      : await synthesizeCachedTranscript(text, config.tts, projectRoot);
+  const audioDuration = getMediaDuration(generated.audioPath);
+  const subtitles = hasGeneratedSubtitles(generated)
+    ? generated.subtitles
+    : parseSrtFile(generated.srtContent);
   const duration = audioDuration;
 
   const assetsRoot = path.join(projectRoot, 'assets');

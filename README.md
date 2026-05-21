@@ -22,6 +22,7 @@ Currently supported templates:
 
 - `classic-player`
 - `blue-book-record-player`
+- `dialogue-podcast`
 
 ## Setup
 
@@ -73,6 +74,27 @@ You can also point to a local manuscript:
 ```json
 "transcript": {
   "file": "inputs/manuscript.txt"
+}
+```
+
+For multi-speaker dialogue, add speaker labels to the manuscript and map those
+labels to TTS voices:
+
+```txt
+[host] Today we are talking about hypnosis.
+[guest_a] A lot of people misunderstand it.
+[guest_b] It is not the same thing as falling asleep.
+```
+
+```json
+"tts": {
+  "apiKey": "your-api-key",
+  "speaker": "fallback-speaker",
+  "speakers": {
+    "host": "host-voice",
+    "guest_a": "guest-a-voice",
+    "guest_b": "guest-b-voice"
+  }
 }
 ```
 

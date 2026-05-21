@@ -1,6 +1,7 @@
 node_modules/
 dist/
 dist-ts/
+build/
 .remotion/
 *.log
 .DS_Store
@@ -18,3 +19,4 @@ assets/generated/
 inputs/*.json
 inputs/*.txt
 !inputs/*.example.json
+!inputs/dialogue-podcast.manuscript.txt

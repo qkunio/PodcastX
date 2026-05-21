@@ -2,7 +2,8 @@ export type FitMode = 'cover' | 'contain' | 'fill';
 
 export type TemplateId =
   | 'blue-book-record-player'
-  | 'classic-player';
+  | 'classic-player'
+  | 'dialogue-podcast';
 
 export type SubtitleStyleConfig = {
   bottom?: number;
@@ -19,6 +20,7 @@ export type SubtitleCue = {
   startMs: number;
   endMs: number;
   text: string;
+  speaker?: string;
 };
 
 export type RenderConfig = {
@@ -48,6 +50,7 @@ export type TtsConfig = {
   apiKey: string;
   resourceId?: string;
   speaker?: string;
+  speakers?: Record<string, string>;
   audioFormat?: string;
   sampleRate?: number;
 };
